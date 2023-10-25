@@ -87,8 +87,44 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    
+    visit = {}
+    sol = []
+    pai = {}
+    com = problem.getStartState()
+    
+    pilha = util.Stack()
+    pilha.push((com, "undefined", 0))
+    
+    goal = False
+    while (pilha.isEmpty() != True or goal != True):
+        no = pilha.pop() # ((coordenadas), nome, custo)
+        visit[no[0]] = no[1]
+        
+        if (problem.isGoalState(no[0])):
+            goal = True
+            no_sol = no[0]
+            break
+        
+        for e in problem.getSuccessors(no[0]):
+            
+            if (e[0] not in visit.keys()):
+                pilha.push(e)
+                pai[e[0]] = no[0]
+                
+        
+            
+    while (no_sol in pai.keys()):
+        no_sol_antes = pai[no_sol]
+        sol.insert(0, visit[no_sol])
+        no_sol = no_sol_antes
+        
+    return sol
 
+        
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"

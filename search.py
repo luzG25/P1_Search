@@ -91,19 +91,22 @@ def depthFirstSearch(problem: SearchProblem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
-    visit = {}
-    sol = []
-    pai = {}
-    com = problem.getStartState()
+    visit = {} # armazenar os nó já visitado
+    sol = [] # armazenar os movimentos para a solução
+    pai = {} # armazenar os pai dos nó
+    com = problem.getStartState() # obter a posição inicial
     
-    pilha = util.Stack()
-    pilha.push((com, "undefined", 0))
+    pilha = util.Stack() #pilha LIFO para armazenar os nos
+    #se ficar sem elemento quer dizer que todos os nos já foram visitados
+    
+    pilha.push((com, "undefined", 0)) # mandar para a pilha o elemento da posição inicial
     
     goal = False
     while (pilha.isEmpty() != True or goal != True):
         no = pilha.pop() # ((coordenadas), nome, custo)
         visit[no[0]] = no[1]
         
+        #Verificar se o NO é o goalstate
         if (problem.isGoalState(no[0])):
             goal = True
             no_sol = no[0]
@@ -111,14 +114,17 @@ def depthFirstSearch(problem: SearchProblem):
         
         for e in problem.getSuccessors(no[0]):
             
-            if (e[0] not in visit.keys()):
+            if (e[0] not in visit.keys()): #verificar se o nó não foi visitado posteriormente
                 pilha.push(e)
                 pai[e[0]] = no[0]
                 
         
             
     while (no_sol in pai.keys()):
-        no_sol_antes = pai[no_sol]
+        # rastrear a origem do no, partindo do no solução até o inicio
+        no_sol_antes = pai[no_sol] 
+        
+        #inserir na lista SOluçao os passos para o pacman chegar ao destino
         sol.insert(0, visit[no_sol])
         no_sol = no_sol_antes
         

@@ -87,9 +87,6 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
     visit = {} # armazenar os nó já visitado
     sol = [] # armazenar os movimentos para a solução
@@ -110,15 +107,15 @@ def depthFirstSearch(problem: SearchProblem):
         if (problem.isGoalState(no[0])):
             goal = True
             no_sol = no[0]
+            print("encontrou o goal state")
             break
         
         for e in problem.getSuccessors(no[0]):
-            
             if (e[0] not in visit.keys()): #verificar se o nó não foi visitado posteriormente
                 pilha.push(e)
                 pai[e[0]] = no[0]
                 
-        
+    
             
     while (no_sol in pai.keys()):
         # rastrear a origem do no, partindo do no solução até o inicio
@@ -134,12 +131,63 @@ def depthFirstSearch(problem: SearchProblem):
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visit = {} # armazenar os nó já visitado
+    sol = [] # armazenar os movimentos para a solução
+    pai = {} # armazenar os pai dos nó
+    com = problem.getStartState() # obter a posição inicial
+    
+    pilha = util.Stack() #pilha LIFO para armazenar os nos
+    #se ficar sem elemento quer dizer que todos os nos já foram visitados
+    
+    pilha.push((com, "undefined", 0)) # mandar para a pilha o elemento da posição inicial
+    
+    goal = False
+    while (pilha.isEmpty() != True or goal != True):
+        no = pilha.pop() # ((coordenadas), nome, custo)
+        
+        visit[no[0]] = no[1]
+    
+        #Verificar se o NO é o goalstate
+        if (problem.isGoalState(no[0])):
+            goal = True
+            no_sol = no[0]
+            break
+        
+        for e in problem.getSuccessors(no[0]):
+            if (e[0] not in visit.keys() and e[0] not in pai.keys()): #verificar se o nó não foi visitado posteriormente
+                pilha.push(e)
+                pai[e[0]] = no[0]
+            
+                
+            
+    while (no_sol in pai.keys()):
+        # rastrear a origem do no, partindo do no solução até o inicio
+        no_sol_antes = pai[no_sol] 
+        
+        #inserir na lista SOluçao os passos para o pacman chegar ao destino
+        sol.insert(0, visit[no_sol])
+        no_sol = no_sol_antes
+        
+    return sol
 
+    
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    
+    # {(0,0)=  }
+    noStart = problem.getStartState()
+
+    nextMvs = problem.getSuccessors(noStart)
+
+    for mv in nextMvs:
+        pos, direction, cost = mv
+        
+        print(f" {pos}, {direction}, {cost} ")
+
     util.raiseNotDefined()
+    
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -159,3 +207,4 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+

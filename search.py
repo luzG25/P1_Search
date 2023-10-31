@@ -173,23 +173,39 @@ def breadthFirstSearch(problem: SearchProblem):
     # codico semelhante ao DFS, mas inves de utilizar um estrutura
     # LIFO, utiliza-se uma estrutura FIFO ...   
 
-    
+
     
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+
+    comeco = problem.getStartState() #obter estado inicial do pacman
+    visitados = {} # armazenar cordenadas e direções já exploradas
     
-    # {(0,0)=  }
-    noStart = problem.getStartState()
+    # priorityQueue é uma estrutura FIFO, mas com uma diferença que remove os elementos tendo em base sua prioridade
+    fila = util.PriorityQueue() #fila contendo (coordenadas, direção, custo) e prioridade
+    #adicionar no inicial na fila com direção indefinida, custo e prioridade 0
+    fila.push((comeco, 'Undefined', 0), 0) 
+    
+    parents = {} #armazenar os nos e seu no pai
+    
+    custo = {} # contendo a coordenada do no e seu respetivo custo até chegar nele
+    custo[comeco] = 0 # adicionando o no de comeco com custo 0
+    
+    goal = False
 
-    nextMvs = problem.getSuccessors(noStart)
+    while(fila.isEmpty() != True and goal != True):
+        """
+        este loop de reptição é diferente do DFS e BFS, que enquanto nos outros
+        a condição é a fila estar vazia ou ter chegado ao goal, no cost-sensitive search 
+        para sair do loop para além de ter chegado no goal é necessario que não haja mais nos para esplorar
+        """
+        pass
 
-    for mv in nextMvs:
-        pos, direction, cost = mv
-        
-        print(f" {pos}, {direction}, {cost} ")
 
-    util.raiseNotDefined()
+    solucao = [] # armazenar os passos até o goal state
+
+    return solucao
     
 
 

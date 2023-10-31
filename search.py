@@ -136,14 +136,14 @@ def breadthFirstSearch(problem: SearchProblem):
     pai = {} # armazenar os pai dos nó
     com = problem.getStartState() # obter a posição inicial
     
-    pilha = util.Stack() #pilha LIFO para armazenar os nos
+    fila = util.Queue() #fila FIFO para armazenar os nos
     #se ficar sem elemento quer dizer que todos os nos já foram visitados
     
-    pilha.push((com, "undefined", 0)) # mandar para a pilha o elemento da posição inicial
+    fila.push((com, "undefined", 0)) # mandar para a fila o elemento da posição inicial
     
     goal = False
-    while (pilha.isEmpty() != True or goal != True):
-        no = pilha.pop() # ((coordenadas), nome, custo)
+    while (fila.isEmpty() != True or goal != True):
+        no = fila.pop() # ((coordenadas), nome, custo)
         
         visit[no[0]] = no[1]
     
@@ -154,11 +154,12 @@ def breadthFirstSearch(problem: SearchProblem):
             break
         
         for e in problem.getSuccessors(no[0]):
-            if (e[0] not in visit.keys() and e[0] not in pai.keys()): #verificar se o nó não foi visitado posteriormente
-                pilha.push(e)
+            # verificar se o no não foi visitado anteriormente e se não foi expandido
+            if (e[0] not in visit.keys() and e[0] not in pai.keys()): 
+                fila.push(e)
                 pai[e[0]] = no[0]
             
-                
+        
             
     while (no_sol in pai.keys()):
         # rastrear a origem do no, partindo do no solução até o inicio
@@ -169,7 +170,10 @@ def breadthFirstSearch(problem: SearchProblem):
         no_sol = no_sol_antes
         
     return sol
+    # codico semelhante ao DFS, mas inves de utilizar um estrutura
+    # LIFO, utiliza-se uma estrutura FIFO ...   
 
+    
     
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""

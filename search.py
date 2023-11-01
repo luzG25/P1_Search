@@ -209,7 +209,7 @@ def uniformCostSearch(problem: SearchProblem):
         if problem.isGoalState(no[0]):
             no_sol = no[0]
             goal = True
-            print("goal State encontrado")
+           # print("goal State encontrado")
             break
         
         #expandir no
@@ -253,7 +253,66 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    comeco = problem.getStartState() #obter estado inicial do pacman
+    visitados = {} # armazenar cordenadas e direções já exploradas
+    
+    # priorityQueue é uma estrutura FIFO, mas com uma diferença que remove os elementos tendo em base sua prioridade
+    fila = util.PriorityQueue() #fila contendo (coordenadas, direção, custo) e prioridade
+    #adicionar no inicial na fila com direção indefinida, custo e prioridade 0
+    fila.push((comeco, 'Undefined', 0), 0) 
+    
+    parents = {} #armazenar os nos e seu no pai
+    
+    custo = {} # contendo a coordenada do no e seu respetivo custo até chegar nele
+    custo[comeco] = 0 # adicionando o no de comeco com custo 0
+    
+    goal = False
+
+    while(fila.isEmpty() != True and goal != True):
+        """
+        o codigo é igual a uniformedcostSearch com adiçao da Heuristica no calculo da prioridade do no
+        """
+        #Retirar elemento da frente da pilha
+        no=fila.pop()
+        
+        #O no ja foi visitado
+        visitados[no[0]]=no[1]
+        #Verificar se o elemento é o goal
+        if problem.isGoalState(no[0]):
+            no_sol = no[0]
+            goal = True
+            break
+        
+        #expandir no
+        for elem in problem.getSuccessors(no[0]):
+            # verificar se o no nao foi visitado anteriormente
+            if elem[0] not in visitados.keys():
+                #função heurística que estima o custo restante para atingir o objetivo a partir do nó 
+                priority = no[2] + elem[2] + heuristic(elem[0],problem) 
+                
+                
+                if elem[0]  in custo.keys():
+                    #verificar se o custo atual é maior que anterior
+                    if custo[elem[0]] <= priority:
+                        continue #se é verdadeiro avançar para proxima iteração
+                    # se o novo custo for menor que o custo antigo, coloque na fila e altere o custo e o pai 
+                fila.push((elem[0], elem[1],no[2]+elem[2]), priority)
+                custo[elem[0]] = priority #Armazenar custo do elemento
+                   
+                parents[elem[0]] = no[0]  # Armazenar o seu no filho
+    
+    
+    solucao=[]    #armazenar os movimentos ate chegar no goal State      
+    # encontrando e armazenando o caminho
+    while(no_sol in parents.keys()):
+        #encontre o pai
+        no_sol_prev=parents[no_sol]
+        # acrescenta a direção à solução
+        solucao.insert(0, visitados[no_sol])
+        # Ir para o nó anterior
+        no_sol= no_sol_prev
+        
+    return solucao
 
 
 # Abbreviations

@@ -107,7 +107,7 @@ def depthFirstSearch(problem: SearchProblem):
         if (problem.isGoalState(no[0])):
             goal = True
             no_sol = no[0]
-            print("encontrou o goal state")
+           # print("encontrou o goal state")
             break
         
         for e in problem.getSuccessors(no[0]):
@@ -200,14 +200,48 @@ def uniformCostSearch(problem: SearchProblem):
         a condição é a fila estar vazia ou ter chegado ao goal, no cost-sensitive search 
         para sair do loop para além de ter chegado no goal é necessario que não haja mais nos para esplorar
         """
-        pass
-
-
-    solucao = [] # armazenar os passos até o goal state
-
-    return solucao
+        #Retirar elemento da frente da pilha
+        no=fila.pop()
+        
+        #O no ja foi visitado
+        visitados[no[0]]=no[1]
+        #Verificar se o elemento é o goal
+        if problem.isGoalState(no[0]):
+            no_sol = no[0]
+            goal = True
+            print("goal State encontrado")
+            break
+        
+        #expandir no
+        for elem in problem.getSuccessors(no[0]):
+            # verificar se o no nao foi visitado anteriormente
+            if elem[0] not in visitados.keys():
+                priority = no[2] + elem[2]
+                
+                
+                if elem[0]  in custo.keys():
+                    #verificar se o custo atual é maior que anterior
+                    if custo[elem[0]] <= priority:
+                        continue #se é verdadeiro avançar para proxima iteração
+                    # se o novo custo for menor que o custo antigo, coloque na fila e altere o custo e o pai 
+                fila.push((elem[0], elem[1], priority), priority)
+                custo[elem[0]] = priority #Armazenar custo do elemento
+                   
+                parents[elem[0]] = no[0]  # Armazenar o seu no filho
     
-
+    
+    solucao=[]    #armazenar os movimentos ate chegar no goal State      
+    # encontrando e armazenando o caminho
+    while(no_sol in parents.keys()):
+        #encontre o pai
+        no_sol_prev=parents[no_sol]
+        # acrescenta a direção à solução
+        solucao.insert(0, visitados[no_sol])
+        # Ir para o nó anterior
+        no_sol= no_sol_prev
+        
+    return solucao
+      
 
 def nullHeuristic(state, problem=None):
     """

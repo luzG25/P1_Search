@@ -198,7 +198,7 @@ def uniformCostSearch(problem: SearchProblem):
         """
         este loop de reptição é diferente do DFS e BFS, que enquanto nos outros
         a condição é a fila estar vazia ou ter chegado ao goal, no cost-sensitive search 
-        para sair do loop para além de ter chegado no goal é necessario que não haja mais nos para esplorar
+        para sair do loop para além de ter chegado no goal é necessario que não haja mais nos para explorar
         """
         #Retirar elemento da frente da pilha
         no=fila.pop()
